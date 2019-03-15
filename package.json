@@ -1,0 +1,16 @@
+{
+  "name": "zara_coding_test",
+  "version": "1.0.0",
+  "description": "Code challenge for Zara.com",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chema Muñoz",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^1.13.0",
+    "request": "^2.88.0"
+  }
+}

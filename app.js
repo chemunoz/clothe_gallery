@@ -1,8 +1,11 @@
 const puppeteer = require('puppeteer');
 const request = require('request');
+const jimp = require('jimp');
 const fs = require('fs');
 const path = require('path');
-const jimp = require('jimp');
+const http = require ("http");
+const url = require('url');
+ 
 
 // ZARA.COM
 (async () => {
@@ -23,14 +26,22 @@ const jimp = require('jimp');
   images.forEach((element, index) => {
     let my_image = element.split('/')[element.split('/').length-1].split('?')[0];
     if (my_image.indexOf("background") === -1){
-      console.log(`Guardando ${my_image}...`);
-      request(element).pipe(fs.createWriteStream(`./images/${my_image}`));
+      // console.log(`Guardando ${my_image}...`);
+      let writeStream = fs.createWriteStream(`./images/${my_image}`);
+      writeStream.on('error', function (err) {
+        console.log("ERROR Stream Capturado", err);
+      });
+      console.log(element);
+      request(element).pipe(writeStream).on('error', error => {
+        console.log("requeusst error", error)
+      });;
     }
   })
   
   await page.tracing.stop();
   await browser.close()
-  resize_images();
+  arr_img = resize_images();
+  server(arr_img);
 })()
 
 
@@ -58,11 +69,12 @@ async function autoScroll(page){
 //LOCAL...
 function resize_images(){
   const folder = './images/';
-
+  let array_images = [];
   fs.readdir(folder, (err, files) => {
     files.forEach(file => {
       if (file !== '.DS_Store' && file.indexOf('.jpg') > -1){
-        console.log(`Redimensionando (75%) ${file}`);
+        // console.log(`Redimensionando (75%) ${file}`);
+        array_images.push(file);
         jimp.read(path.join(folder, file))
         .then(image => {
           return image
@@ -70,11 +82,37 @@ function resize_images(){
             .write(path.join('images', 'resized', file)); // save
         })
         .catch(err => {
-          console.error(file  +": "+ err);
+          // console.error(file  +": "+ err);
         });
-
       }
     });
   });
-  
+  return array_images;
+}
+
+function server(arr){
+  // fs.readFile('./index.html', function (err, html) {
+
+    http.createServer(function(req, res){
+      let urlParts = url.parse(req.url);
+
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Request-Method', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      res.setHeader('Access-Control-Allow-Headers', '*');
+
+      switch(urlParts.pathname) {
+        case "/photos":
+          res.setHeader('Content-Type', 'application/json; charset=utf-8');
+          res.end(JSON.stringify(arr))
+          break;
+        default:
+          res.setHeader("Content-Type", "text/html");
+          res.write(html);
+          res.end(); 
+          break;
+    } 
+    }).listen(3000);
+  // });
+  console.log(`\Sirviendo imágenes descargadas en http://localhost:3000/photos \nAcceda al fichero "index.html"`);
 }

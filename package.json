@@ -10,8 +10,10 @@
   "author": "Chema Muñoz",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.16.4",
     "jimp": "^0.6.0",
     "puppeteer": "^1.13.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "requirejs": "^2.3.6"
   }
 }

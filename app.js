@@ -1,7 +1,10 @@
 const puppeteer = require('puppeteer');
 const request = require('request');
 const fs = require('fs');
+const path = require('path');
+const jimp = require('jimp');
 
+// ZARA.COM
 (async () => {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
@@ -27,6 +30,7 @@ const fs = require('fs');
   
   await page.tracing.stop();
   await browser.close()
+  resize_images();
 })()
 
 
@@ -48,4 +52,29 @@ async function autoScroll(page){
       }, 100);
     });
   });
+}
+
+
+//LOCAL...
+function resize_images(){
+  const folder = './images/';
+
+  fs.readdir(folder, (err, files) => {
+    files.forEach(file => {
+      if (file !== '.DS_Store' && file.indexOf('.jpg') > -1){
+        console.log(`Redimensionando (75%) ${file}`);
+        jimp.read(path.join(folder, file))
+        .then(image => {
+          return image
+            .scale(0.75)
+            .write(path.join('images', 'resized', file)); // save
+        })
+        .catch(err => {
+          console.error(file  +": "+ err);
+        });
+
+      }
+    });
+  });
+  
 }

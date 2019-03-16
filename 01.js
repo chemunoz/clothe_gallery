@@ -13,15 +13,17 @@ const app = new Vue({
     }
   },
   methods: {
-    randChunkSplit() {
-      let size = 1;
+    randomGroups() {
+      this.imagesGroups = [];
       let max = 3;
       let min = 2;
-      let contador = this.imagesGroups.length;
-      while ( contador > 3) {
-        size = Math.min(max, Math.floor((Math.random() * max) + min));
-        this.imagesGroups.push(this.imagesGroups.splice(0, size));
+      console.log(this.imagesURL.length);
+      while ( this.imagesURL.length > 3) {
+        (this.imagesURL.length === max+1) ? size = 2 : size = Math.min(max, Math.floor((Math.random() * max) + min));
+        this.imagesGroups.push(this.imagesURL.splice(0, size));
       }
+      this.imagesGroups.push(this.imagesURL.splice(0, this.imagesURL.length));
+      console.log("Grupos", this.imagesGroups);
     }
   },
   created(){
@@ -33,14 +35,7 @@ const app = new Vue({
       this.imagesURL = json.map((el)=>{
         return 'images/resized/' + el
       });
-      let max = 3;
-      let min = 2;
-      while ( this.imagesURL.length > 3) {
-        size = Math.min(max, Math.floor((Math.random() * max) + min));
-        this.imagesGroups.push(this.imagesURL.splice(0, size));
-      }
-      this.imagesGroups.push(this.imagesURL.splice(0, this.imagesURL.length));
-      console.log("Grupos", this.imagesGroups);
+      this.randomGroups();
     })
   }
 });

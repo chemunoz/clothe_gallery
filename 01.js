@@ -7,9 +7,14 @@ const app = new Vue({
   },
   computed: {
     imagesTotal(){
-      return this.images.reduce((sum, image) => {
-        return sum + 1
-      }, 0);
+      return this.images.length;
+    },
+    groupsTotal(){
+      return {
+        total: this.imagesGroups.length,
+        group2: this.imagesGroups.filter((element => element.length ===2 )).length,
+        group3: this.imagesGroups.filter((element => element.length === 3)).length
+      }
     }
   },
   methods: {

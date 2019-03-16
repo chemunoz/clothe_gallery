@@ -7,6 +7,7 @@ const fs = require('fs');
 exports.zara = async (url) => {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
+  const folder = './images/';
   await page.tracing.start({path: 'trace.json', categories: ['devtools.timeline']})
   console.log("Cargando web Zara.com...")
   await page.goto(url)
@@ -20,12 +21,19 @@ exports.zara = async (url) => {
 
   // Recorremos el array guardando cada imagen en local
   console.log("Obteniendo imágenes...")
+  if (!fs.existsSync(folder)){
+    fs.mkdirSync(folder);
+    fs.chmodSync = function(path, mode) {
+      return binding.chmod(pathModule._makeLong(path), modeNum(mode));
+    };
+    fs.chmodSync(folder, '755');
+  }
   images.forEach((element, index) => {
     let image_name = element.split('/')[element.split('/').length-1].split('?')[0];
     if (image_name.indexOf("background") === -1){
       console.log(`   ${element}`);
       // console.log(`Guardando ${image_name}...`);
-      let writeStream = fs.createWriteStream(`./images/${image_name}`);
+      let writeStream = fs.createWriteStream(`${folder}${image_name}`);
       request(element).pipe(writeStream).on('error', error => {
         console.log("request error", error)
       });

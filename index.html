@@ -8,15 +8,16 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 </head>
-<body class="">
+<body>
   <div id="app" class="container mt-3">
     <div class="h1">Total Images: {{ imagesTotal}}</div>
+    <hr>
     <div v-for="groups in imagesGroups">
       <div class="h3 my-3">Grupo de {{groups.length}}</div>
-      <img v-for="image in groups" :src="image" alt="" height="200" class="mr-3"> 
+      <img v-for="image in groups" :src="image" alt="" height="200" class="mr-3">
     </div>
   </div>
 
-  <script src="index.js"></script>
+  <script src="01.js"></script>
 </body>
 </html>

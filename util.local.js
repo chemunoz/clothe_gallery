@@ -3,9 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 
-exports.resize_images = () => {
+exports.resize_images = (folder) => {
   console.log(`Redimensionando imágenes al 75%...`);
-  const folder = './images/';
   let array_images = [];
 
   fs.readdir(folder, (err, files) => {

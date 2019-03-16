@@ -4,10 +4,9 @@ const fs = require('fs');
 
 
 // ZARA.COM
-exports.zara = async (url) => {
+exports.zara = async (url, folder) => {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
-  const folder = './images/';
   await page.tracing.start({path: 'trace.json', categories: ['devtools.timeline']})
   console.log("Cargando web Zara.com...")
   await page.goto(url)
@@ -41,7 +40,7 @@ exports.zara = async (url) => {
   })
   
   await page.tracing.stop();
-  await browser.close()
+  await browser.close();
 }
 
 

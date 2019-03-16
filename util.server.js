@@ -13,4 +13,5 @@ exports.server = (arr)=> {
     res.end(JSON.stringify(arr))
   }).listen(3000);
   console.log(`\Sirviendo imágenes descargadas en http://localhost:3000\nAcceda al fichero "index.html"`);
+  return 'server OK';
 }
